@@ -77,32 +77,32 @@ app.listen(port, () => {
 
 
     
-// url list 
-const urlList = `
-    http://www.amaya.biz/
-    http://www.farzilondon.com/
-    http://www.amaya.biz/
-    http://www.farzilondon.com/
-    http://www.amaya.biz/
-    http://www.farzilondon.com/
-    http://www.amaya.biz/
-    http://www.farzilondon.com/
-    http://www.amaya.biz/
-    http://www.farzilondon.com/
-    http://www.amaya.biz/
-    http://www.farzilondon.com/
-    http://www.amaya.biz/
-    http://www.farzilondon.com/
-    http://www.amaya.biz/
-    http://www.farzilondon.com/
-    http://www.amaya.biz/
-    http://www.farzilondon.com/
-    http://www.amaya.biz/
-    http://www.farzilondon.com/
-`;
+// // url list 
+// const urlList = `
+//     http://www.amaya.biz/
+//     http://www.farzilondon.com/
+//     http://www.amaya.biz/
+//     http://www.farzilondon.com/
+//     http://www.amaya.biz/
+//     http://www.farzilondon.com/
+//     http://www.amaya.biz/
+//     http://www.farzilondon.com/
+//     http://www.amaya.biz/
+//     http://www.farzilondon.com/
+//     http://www.amaya.biz/
+//     http://www.farzilondon.com/
+//     http://www.amaya.biz/
+//     http://www.farzilondon.com/
+//     http://www.amaya.biz/
+//     http://www.farzilondon.com/
+//     http://www.amaya.biz/
+//     http://www.farzilondon.com/
+//     http://www.amaya.biz/
+//     http://www.farzilondon.com/
+// `;
 
-const l  = urlList.split('\n');
-const removeEmpty = l.filter(item => item.trim() !== '');
+// const l  = urlList.split('\n');
+// const removeEmpty = l.filter(item => item.trim() !== '');
 
 
 // mainFunction(removeEmpty);
@@ -120,14 +120,24 @@ async function mainFunction(urlList, moreData) {
     // open all pages
     const pagelist = await Promise.all(urlList.map(async (url, index) => {
         const page = await browser.newPage();
-        await page.goto(url.trim(), {
-            timeout: 500000,
-        });
-        return {
-            "page": page,
-            "url": url,
-            "index": index
-        };
+        try {
+            await page.goto(url.trim(), {
+                timeout: 500000,
+            });
+            return {
+                "page": page,
+                "url": url,
+                "index": index
+            };
+        } catch (error) {
+            await page.close();
+            return {
+                "page": page,
+                "url": url,
+                "index": index
+            };
+
+        }
     }));
 
     // get data of all pages
@@ -155,6 +165,8 @@ async function mainFunction(urlList, moreData) {
         const telegram = await page.$eval('a[href*="telegram"]', el => el.href).catch(() => '');
         
         return {
+            "Phone_from_website": uniquePhoneNumbers,
+            "Emails": uniqueEmails,
             "linkedin": linkedin,
             "facebook": facebook,
             "twitter": twitter,
@@ -165,11 +177,9 @@ async function mainFunction(urlList, moreData) {
             "whatsapp": whatsapp,
             "tiktok": tiktok,
             "telegram": telegram,
-            "phoneNumbers": uniquePhoneNumbers,
-            "emails": uniqueEmails,
             "title": title,
             "url": item.url,
-            "index": item.index 
+            // "index": item.index 
         };
     }));
 
