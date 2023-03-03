@@ -122,7 +122,7 @@ async function mainFunction(urlList, moreData) {
         const page = await browser.newPage();
         try {
             await page.goto(url.trim(), {
-                timeout: 500000,
+                // timeout: 500000, // it means 
             });
             return {
                 "page": page,
