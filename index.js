@@ -22,6 +22,10 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.get('/', async (req, res) => {
+    res.send('Hello World!');
+});
+
 app.post('/queryWebsite', async(req, res) => {
 
     const websites = req.body;
