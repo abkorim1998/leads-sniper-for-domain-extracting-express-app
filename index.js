@@ -111,8 +111,9 @@ async function mainFunction(urlList, moreData) {
     // open browser 
     const browser = await puppeteer.launch({
         headless: false,
+        executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
         // executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
-        executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+        // executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
     });
 
 
