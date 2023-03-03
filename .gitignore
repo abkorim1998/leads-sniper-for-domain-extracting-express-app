@@ -1,0 +1,5 @@
+/node_modules
+/dist
+/clintupload
+/scrapt_data
+.env
